@@ -1,0 +1,196 @@
+/* ============================================================
+   report.css — styles for research report pages
+   Signature: engineering grid paper + a conservation equation
+   set as the hero. Data is IBM Plex Mono with tabular figures;
+   argument is Newsreader; headings are Bricolage Grotesque.
+   ============================================================ */
+
+body.report{
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:56px 56px;
+  background-position:-1px -1px;
+}
+.sheet{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- MASTHEAD ---------- */
+.masthead{padding:34px 0 26px;border-bottom:2px solid var(--ink)}
+.eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);
+  display:flex;flex-wrap:wrap;gap:8px 18px;
+}
+.eyebrow b{color:var(--teal);font-weight:500}
+.masthead h1{
+  font-weight:800;font-size:clamp(2rem,5.2vw,3.5rem);
+  line-height:1.04;margin:18px 0 0;max-width:22ch;
+}
+.masthead .sub{margin:16px 0 0;max-width:64ch;color:var(--muted);font-size:1.06rem}
+
+/* ---------- HERO: the conservation equation ---------- */
+.thesis{padding:36px 0 34px;border-bottom:1px solid var(--line)}
+.eqlabel{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:18px;
+}
+.eq{
+  font-family:var(--mono);font-size:clamp(.95rem,2.3vw,1.6rem);font-weight:500;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:.5em;line-height:1.55;
+}
+.eq .op{color:var(--muted)}
+.eq .stolen{color:var(--signal);font-weight:500;position:relative}
+.eq .stolen::after{
+  content:"";position:absolute;left:0;right:0;bottom:-5px;height:2px;
+  background:var(--signal);transform:scaleX(0);transform-origin:left;
+  animation:underline .7s .45s forwards cubic-bezier(.2,.7,.3,1);
+}
+@keyframes underline{to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){
+  .eq .stolen::after{transform:scaleX(1)}
+}
+.note{margin:20px 0 0;max-width:72ch;color:var(--muted);font-size:1rem}
+.note strong{color:var(--ink);font-weight:500}
+
+/* ---------- BALANCE BAR (signature) ---------- */
+.balance{margin:30px 0 0}
+.bar{display:flex;height:46px;border:1px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.74rem;color:#fff;
+  white-space:nowrap;overflow:hidden;
+}
+.seg.metered{background:var(--ink);flex:0 0 78%}
+.seg.tech{background:var(--muted);flex:0 0 9%}
+.seg.theft{background:var(--signal);flex:0 0 13%}
+[data-theme="dark"] .seg.metered{color:var(--bg)}
+[data-theme="dark"] .seg.tech,[data-theme="dark"] .seg.theft{color:var(--bg)}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .seg{color:var(--bg)}
+}
+.barkey{
+  display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:12px;
+  font-family:var(--mono);font-size:.72rem;color:var(--muted);
+}
+.barkey i{display:inline-block;width:10px;height:10px;margin-right:7px}
+
+/* ---------- SECTION HEAD ---------- */
+.rsec{padding:40px 0 0}
+.shead{
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+  border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:24px;
+}
+.shead h2{margin:0;font-size:clamp(1.3rem,2.6vw,1.7rem)}
+.shead .tag{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);margin-left:auto;
+}
+
+/* ---------- FIELD STRIP ---------- */
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:1px;background:var(--line)}
+.field{background:var(--surface);padding:18px 16px}
+.field .k{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);
+}
+.field .v{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.1;margin-top:8px;
+}
+.field .n{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:5px}
+
+/* ---------- TABLES ---------- */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+caption{
+  text-align:left;font-family:var(--mono);font-size:.72rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);padding-bottom:10px;
+}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+thead th{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;border-bottom:1px solid var(--ink);
+}
+tbody th{font-family:var(--prose);font-weight:400;color:var(--ink)}
+tbody td{font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr.lead th,tbody tr.lead td{background:var(--teal-soft);font-weight:500}
+tbody tr.weak th,tbody tr.weak td{background:var(--signal-soft)}
+td .flag{color:var(--signal);font-weight:500}
+td .good{color:var(--teal);font-weight:500}
+.tienote{
+  font-family:var(--mono);font-size:.7rem;color:var(--muted);
+  margin-top:10px;
+}
+
+/* ---------- HIT-RATE CHART ---------- */
+.chart{display:grid;gap:13px;margin-top:4px}
+.crow{display:grid;grid-template-columns:112px 1fr 58px;align-items:center;gap:14px}
+.crow .lab{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.crow .track{position:relative;height:28px;background:var(--grid);border-left:1px solid var(--ink)}
+.crow .fill{height:100%;background:var(--teal)}
+.crow .fill.base{background:var(--muted)}
+.crow .num{font-family:var(--mono);font-weight:500;font-size:.94rem}
+.chartnote{
+  font-family:var(--mono);font-size:.72rem;color:var(--muted);
+  margin-top:12px;padding-left:126px;
+}
+
+/* ---------- ECONOMICS ---------- */
+.econ{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:1px;background:var(--line)}
+.ecard{background:var(--surface);padding:20px 18px}
+.ecard .k{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);
+}
+.ecard .v{font-family:var(--display);font-weight:800;font-size:2rem;margin-top:8px;line-height:1}
+.ecard .v.neg{color:var(--signal)}
+.ecard .v.pos{color:var(--teal)}
+.ecard .n{font-size:.86rem;color:var(--muted);margin-top:8px}
+.pull{margin:24px 0 0;padding:22px 24px;background:var(--ink);border-radius:3px}
+.pull p{
+  margin:0;font-family:var(--display);font-weight:600;
+  font-size:clamp(1.05rem,2.2vw,1.4rem);line-height:1.35;color:var(--bg);
+}
+/* The pull panel inverts with the theme (ink fill, bg text), so its dim
+   caption needs an explicit value on each side rather than --muted. */
+.pull small{
+  display:block;margin-top:12px;font-family:var(--mono);font-size:.72rem;
+  letter-spacing:.04em;color:#9AA9B4;font-weight:400;
+}
+[data-theme="dark"] .pull small{color:#4A5B69}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .pull small{color:#4A5B69}
+}
+
+/* ---------- TWO-COLUMN BUILD ---------- */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.stack,.limits{list-style:none}
+.stack li{
+  padding:10px 0;border-bottom:1px solid var(--line);
+  font-size:.92rem;display:flex;gap:14px;
+}
+.stack li b{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);flex:0 0 104px;padding-top:3px;font-weight:500;
+}
+.limits li{
+  border-bottom:1px solid var(--line);padding:11px 0 11px 22px;
+  position:relative;font-size:.92rem;
+}
+.limits li::before{content:"—";position:absolute;left:0;color:var(--signal)}
+
+/* ---------- BACK LINK ---------- */
+.backhome{
+  display:inline-block;margin:36px 0 0;font-family:var(--mono);font-size:.8rem;
+  color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;
+}
+.backhome:hover{color:var(--teal);border-color:var(--teal)}
+
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr;gap:28px}
+  .crow{grid-template-columns:82px 1fr 50px}
+  .chartnote{padding-left:0}
+  .stack li{flex-direction:column;gap:2px}
+  .stack li b{flex:none}
+}
