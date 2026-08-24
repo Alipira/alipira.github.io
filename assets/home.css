@@ -135,5 +135,68 @@
   .hero-grid{grid-template-columns:1fr}
   .hero-grid .avatar{order:-1}
   .about-grid{grid-template-columns:1fr;gap:28px}
-  .site-nav a[href="#about"]{display:none}
+  .site-nav a[href="#about"],
+  .site-nav a[href="#contact"]{display:none}
 }
+
+/* ============================================================
+   CV
+   Companies are the outer unit, roles nest inside them, so a
+   promotion reads as a promotion instead of two separate jobs.
+   ============================================================ */
+.cvtools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:34px}
+.cv{list-style:none}
+.post{
+  display:grid;grid-template-columns:236px 1fr;gap:32px;
+  padding:26px 0;border-top:1px solid var(--line);
+}
+.post:first-child{border-top:2px solid var(--ink)}
+.rail{position:relative;padding-left:20px}
+.rail::before{
+  content:"";position:absolute;left:4px;top:9px;bottom:-26px;
+  width:1px;background:var(--line);
+}
+.post:last-child .rail::before{bottom:auto;height:0}
+.rail::after{
+  content:"";position:absolute;left:0;top:7px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--teal);
+}
+.rail h3{font-size:1.2rem;line-height:1.25;margin-bottom:4px}
+.rail .org{font-size:.92rem;color:var(--muted);margin-bottom:8px}
+.rail .span{font-family:var(--mono);font-size:.76rem;color:var(--muted)}
+.roles{display:grid;gap:22px}
+.role-block h4{
+  font-family:var(--display);font-weight:600;font-size:1.02rem;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin-bottom:10px;
+}
+.role-block h4 .when{
+  font-family:var(--mono);font-size:.74rem;font-weight:400;color:var(--muted);
+}
+.role-block ul{list-style:none}
+.role-block li{
+  position:relative;padding:0 0 9px 18px;font-size:.97rem;max-width:74ch;
+}
+.role-block li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:6px;height:1px;background:var(--teal);
+}
+.role-block li b{font-weight:500;color:var(--ink)}
+
+.credentials{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:36px;
+  border-top:2px solid var(--ink);padding-top:26px}
+.cred li{padding:10px 0;border-bottom:1px solid var(--line);font-size:.95rem;list-style:none}
+.cred li .when{font-family:var(--mono);font-size:.74rem;color:var(--muted);display:block;margin-top:3px}
+.cred li em{font-style:italic;color:var(--muted)}
+.verify{
+  font-family:var(--mono);font-size:.74rem;color:var(--muted);
+  border:1px dashed var(--line);border-radius:8px;padding:12px 14px;margin-top:26px;
+}
+
+@media (max-width:820px){
+  .post{grid-template-columns:1fr;gap:18px}
+  .rail::before{display:none}
+  .credentials{grid-template-columns:1fr;gap:26px}
+}
+
+.mini.stacked{margin-top:22px}

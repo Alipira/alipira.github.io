@@ -1,0 +1,52 @@
+/* ============================================================
+   print.css — turns the hub page into a printable CV.
+   Browser → Print → Save as PDF gives a clean document: name,
+   contact line, profile, experience, credentials. Everything
+   else on the page is dropped.
+   ============================================================ */
+@media print{
+  :root{
+    --bg:#fff; --surface:#fff; --ink:#000; --muted:#444;
+    --line:#bbb; --grid:#ddd; --teal:#000; --amber:#000;
+    --teal-soft:transparent; --on-accent:#000;
+  }
+  html,body{background:#fff !important;color:#000;font-size:10.5pt}
+  .wrap{max-width:none;padding:0}
+
+  /* drop everything that isn't the CV */
+  .site-head, .site-foot, #library, #research, #contact,
+  .avatar, .stats, .fig, .cvtools, .skip, .verify{display:none !important}
+
+  .hero{padding:0 0 12pt}
+  .hero-grid{display:block}
+  .hero h1{font-size:24pt;margin-bottom:4pt}
+  .role{font-size:9pt;letter-spacing:.1em;margin-bottom:8pt;color:#000}
+  .lede{display:none}
+  .hero-links{gap:0 14pt;margin:0;border-top:1px solid #bbb;padding-top:8pt}
+  .hero-links a{border:0;font-size:9pt}
+
+  .band{padding:14pt 0 0}
+  h2{font-size:13pt;margin-bottom:6pt;border-bottom:1px solid #000;padding-bottom:3pt}
+  .section-intro{display:none}
+
+  .about-grid{display:block}
+  .about-grid p{max-width:none;margin-bottom:6pt}
+  .now{margin-bottom:10pt}
+  .mini{margin-top:10pt}
+  .chip{border-color:#999}
+
+  .post{
+    grid-template-columns:150pt 1fr;gap:14pt;padding:10pt 0;
+    break-inside:avoid;page-break-inside:avoid;
+  }
+  .rail{padding-left:0}
+  .rail::before,.rail::after{display:none}
+  .rail h3{font-size:11pt}
+  .role-block{break-inside:avoid;page-break-inside:avoid}
+  .role-block li{padding-bottom:4pt;max-width:none}
+  .role-block li::before{background:#000}
+  .credentials{gap:14pt}
+
+  a{text-decoration:none;color:#000}
+  .reveal{opacity:1 !important;transform:none !important}
+}
