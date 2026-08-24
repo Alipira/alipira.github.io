@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/home.css">
+<link rel="stylesheet" href="assets/print.css" media="print">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -32,6 +33,7 @@
       <a href="#library">library</a>
       <a href="#research">research</a>
       <a href="#about">about</a>
+      <a href="#cv">cv</a>
       <a href="#contact">contact</a>
       <button class="theme-btn" aria-label="Toggle colour theme">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -64,7 +66,8 @@
           <span><b>23</b> design patterns</span><span class="sep">·</span>
           <span><b>882</b> interview questions</span><span class="sep">·</span>
           <span><b>2</b> career tracks</span><span class="sep">·</span>
-          <span><b>3</b> research lines</span>
+          <span><b>3</b> research lines</span><span class="sep">·</span>
+          <span>in data since <b>2015</b></span>
         </p>
       </div>
       <div class="avatar" aria-hidden="true">
@@ -303,23 +306,24 @@
         <div>
           <p>
             I came to data from hardware. My BSc is in electrical engineering,
-            specialising in electronics and automation, and I spent my first
-            years after graduating as an electrical engineer in the energy
-            sector — where the work turned steadily into data work. I built
-            SARIMAX and ARIMA demand forecasts that tightened equipment
-            inventory planning, and the first production version of the
-            theft-detection system that became my longest-running research
-            project.
+            specialising in electronics and automation, and I started in the
+            energy sector doing both jobs at once — the electrical work, and
+            the first data science I was trusted with. That is where I built
+            SARIMAX and ARIMA demand forecasts that cut inventory holding costs
+            by 10%, and the anomaly-detection system that cut electricity-theft
+            losses by 3% and became my longest-running research project.
           </p>
           <p>
-            That shift sent me back to university for an MSc in mechatronic
-            engineering, specialising in AI and robotics, with a thesis on
-            multi-agent decision making under reinforcement learning.
+            To do the second kind of work properly I went back to university
+            for an MSc in mechatronic engineering, specialising in AI and
+            robotics, with a thesis on multi-agent decision making under
+            reinforcement learning.
           </p>
           <p>
-            Since 2023 I have worked as a data scientist across confectionery
-            manufacturing and ERP systems, concentrating on natural language
-            processing, large language models, time series, and finance.
+            Since then the data has changed and the questions haven't:
+            customer behaviour, demand, support tickets, delivery routes. My
+            work now centres on natural language processing, large language
+            models, time series, and finance.
           </p>
           <p>
             Teaching is the other half of the job. Mentoring junior data
@@ -349,10 +353,179 @@
     </div>
   </section>
 
+  <!-- ============================ CV ==============================
+       TO ADD A ROLE: if it's at a company already listed, add an
+       <article class="role-block"> inside that company's .roles div.
+       For a new employer, copy a whole <li class="post"> block.
+       The page prints as a clean CV — see assets/print.css.
+       ============================================================== -->
+  <section class="band" id="cv">
+    <div class="wrap">
+      <p class="fig"><b>fig. 4</b> — curriculum vitae</p>
+      <h2>Four organisations, 2015 to now</h2>
+      <p class="section-intro">
+        Grouped by employer, so the progressions read as progressions. Every
+        figure below is a measured result from the work, not an estimate.
+      </p>
+      <div class="cvtools">
+        <button class="btn btn-ghost" onclick="window.print()">Print / save as PDF</button>
+        <span class="status">Open to relocation</span>
+      </div>
+
+      <ol class="cv">
+
+        <li class="post reveal">
+          <div class="rail">
+            <h3>Bulut</h3>
+            <p class="span">Jun 2024 — present</p>
+          </div>
+          <div class="roles">
+            <article class="role-block">
+              <h4>Senior Data Scientist <span class="when">Jun 2024 — present</span></h4>
+              <ul>
+                <li>Partnered with logistics, product and operations teams on a hybrid ML and greedy transport-routing system, cutting vehicle usage by <b>25%</b> on average — roughly 300 vehicles over a year across 28 branches — through near-real-time scheduling.</li>
+                <li>Led development of a production, tool-augmented RAG chatbot serving support staff and customers at <b>~500 conversations per month</b>, collapsing resolutions that previously took around three hours of manual lookups across three systems into a single conversation. Memory, vector search over backend APIs and databases, controlled retrieval policies, and source-provenance governance.</li>
+                <li>Engineered deep-learning customer segmentation for <b>~5,800</b> wholesale clients — PyTorch VAE plus GMM on Spark-scale transactions — producing persistent, behaviour-anchored segments used for client tiering and targeted campaigns.</li>
+                <li>Delivered a trilingual sentiment-analysis system for support tickets in English, Persian and Turkish, combining classical ML and transformer models to reach <b>macro-F1 0.86</b>.</li>
+                <li>Created an internal LLM-compiled knowledge wiki — structured generation, BM25 search, link graph, provenance tracking — to centralise organisational knowledge.</li>
+                <li>Automated ETL pipelines with Apache Airflow and API integrations, improving data-processing efficiency by <b>30%</b>.</li>
+                <li>Mentor two junior data scientists and a data analyst on model development, evaluation and code quality.</li>
+              </ul>
+            </article>
+          </div>
+        </li>
+
+        <li class="post reveal">
+          <div class="rail">
+            <h3>Shoniz</h3>
+            <p class="org">Tabriz</p>
+            <p class="span">Dec 2023 — Jun 2024</p>
+          </div>
+          <div class="roles">
+            <article class="role-block">
+              <h4>Senior Data Scientist <span class="when">Dec 2023 — Jun 2024</span></h4>
+              <ul>
+                <li>Co-designed an attention-based recommendation system and deployed it to edge devices for low-latency, high-accuracy inference in resource-constrained environments.</li>
+                <li>Modelled price elasticity to optimise export pricing across five or more international regions.</li>
+                <li>Bridged product, data engineering and business units as technical liaison, prioritising production-readiness, explainability and audit trails.</li>
+              </ul>
+            </article>
+          </div>
+        </li>
+
+        <li class="post reveal">
+          <div class="rail">
+            <h3>Shoniz</h3>
+            <p class="org">Tabriz</p>
+            <p class="span">Sep 2019 — Nov 2020</p>
+          </div>
+          <div class="roles">
+            <article class="role-block">
+              <h4>Data Scientist <span class="when">Sep 2019 — Nov 2020</span></h4>
+              <ul>
+                <li>Co-architected an explainable customer credit-scoring framework with Finance and Compliance that cut overdue receivables by <b>5%</b> and bad-debt exposure by <b>3%</b> — clustering-based segmentation, statistical scorecards, calibrated probability thresholds, and full audit traceability.</li>
+                <li>Partnered with Sales and data engineering to deliver autoencoder-based customer segmentation powering targeted campaigns.</li>
+                <li>Developed raw-material warehouse analytics covering risk, replenishment and inventory, with multivariate regression for consumption forecasting.</li>
+              </ul>
+            </article>
+          </div>
+        </li>
+
+        <li class="post reveal">
+          <div class="rail">
+            <h3>Azar Bonyan Niroo</h3>
+            <p class="org">Energy sector · Tabriz</p>
+            <p class="span">Aug 2015 — Aug 2019</p>
+          </div>
+          <div class="roles">
+            <article class="role-block">
+              <h4>Data Scientist <span class="when">Aug 2016 — Aug 2019</span></h4>
+              <ul>
+                <li>Cut inventory holding costs by <b>10%</b> with SARIMAX and ARIMA equipment demand forecasting.</li>
+                <li>Built fraud-detection models for low-voltage electrical power lines to mitigate electricity theft.</li>
+              </ul>
+            </article>
+            <article class="role-block">
+              <h4>Junior Data Scientist <span class="when">Aug 2015 — Jul 2016</span></h4>
+              <ul>
+                <li>Reduced electricity-theft losses by <b>3%</b> with a K-means and SVM anomaly-detection system.</li>
+                <li>Implemented a real-time energy-monitoring dashboard enabling cross-functional teams to optimise resource allocation and cut costs.</li>
+              </ul>
+            </article>
+          </div>
+        </li>
+
+        <li class="post reveal">
+          <div class="rail">
+            <h3>University of Tabriz</h3>
+            <p class="org">Part-time</p>
+            <p class="span">Sep 2021 — Apr 2023</p>
+          </div>
+          <div class="roles">
+            <article class="role-block">
+              <h4>Research &amp; Teaching Assistant <span class="when">Sep 2021 — Apr 2023</span></h4>
+              <ul>
+                <li>Designed an ML-based decision-making system optimising resource allocation for industrial applications.</li>
+                <li>Mentored <b>20+</b> students in neural networks and AI, and led hands-on workshops in statistics and random processes applied to financial forecasting and engineering.</li>
+              </ul>
+            </article>
+          </div>
+        </li>
+
+      </ol>
+
+      <div class="credentials">
+        <div>
+          <p class="mini">Education</p>
+          <ul class="cred">
+            <li>
+              MSc Mechatronic Engineering — AI &amp; Robotics, University of Tabriz
+              <em>Thesis: multi-agent decision making with reinforcement learning</em>
+              <span class="when">2019 — 2022</span>
+            </li>
+            <li>
+              BSc Electrical Engineering — Electronics &amp; Automation, University of Tabriz
+              <span class="when">2011 — 2015</span>
+            </li>
+          </ul>
+          <p class="mini stacked">Languages</p>
+          <ul class="cred">
+            <li>Turkish — native</li>
+            <li>Persian — native</li>
+            <li>English — professional (IELTS 7.5)</li>
+            <li>German — A2</li>
+          </ul>
+        </div>
+        <div>
+          <p class="mini">Certifications</p>
+          <ul class="cred">
+            <li>Machine Learning, Deep Learning &amp; LLMs — Sharif University of Technology</li>
+            <li>Applied Statistics, Stochastic Processes &amp; Financial Mathematics — Sharif University of Technology</li>
+            <li>Natural Language Processing — Stanford</li>
+          </ul>
+          <p class="mini stacked">Selected work on this site</p>
+          <ul class="cred">
+            <li><a href="#research">PI-STGAT — non-technical loss detection</a><span class="when">Independent research · ongoing</span></li>
+            <li><a href="#library">Three open field guides</a><span class="when">Roadmap · design patterns · interview bank</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Education, languages and certifications were carried over from earlier
+           drafts of Ali's CV rather than supplied with this experience list.
+           Verify them, then delete this note and the .verify block below. -->
+      <p class="verify">
+        Verify before publishing: education dates, language levels and certification
+        titles were carried over from an earlier version of the CV, not from the
+        experience list above.
+      </p>
+    </div>
+  </section>
+
   <!-- ========================== CONTACT =========================== -->
   <section class="band" id="contact">
     <div class="wrap">
-      <p class="fig"><b>fig. 4</b> — contact</p>
+      <p class="fig"><b>fig. 5</b> — contact</p>
       <h2>Say hello</h2>
       <p class="section-intro">
         Questions about the guides, the research, or work — email is the fastest route.
