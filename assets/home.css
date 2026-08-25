@@ -200,3 +200,8 @@
 }
 
 .mini.stacked{margin-top:22px}
+
+/* Education entries sit in the same timeline as the jobs — an amber marker
+   keeps them readable as study rather than employment. */
+.post.edu .rail::after{background:var(--amber)}
+.post.edu .role-block li::before{background:var(--amber)}
