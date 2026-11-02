@@ -125,12 +125,12 @@ td .good{color:var(--teal);font-weight:500}
 
 /* ---------- HIT-RATE CHART ---------- */
 .chart{display:grid;gap:13px;margin-top:4px}
-.crow{display:grid;grid-template-columns:112px 1fr 58px;align-items:center;gap:14px}
+.crow{display:grid;grid-template-columns:112px 1fr auto;align-items:center;gap:14px}
 .crow .lab{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
 .crow .track{position:relative;height:28px;background:var(--grid);border-left:1px solid var(--ink)}
-.crow .fill{height:100%;background:var(--teal)}
+.crow .fill{display:block;height:100%;background:var(--teal)}
 .crow .fill.base{background:var(--muted)}
-.crow .num{font-family:var(--mono);font-weight:500;font-size:.94rem}
+.crow .num{font-family:var(--mono);font-weight:500;font-size:.94rem;white-space:nowrap;min-width:3.6em}
 .chartnote{
   font-family:var(--mono);font-size:.72rem;color:var(--muted);
   margin-top:12px;padding-left:126px;
@@ -190,7 +190,7 @@ td .good{color:var(--teal);font-weight:500}
 
 @media (max-width:760px){
   .cols{grid-template-columns:1fr;gap:28px}
-  .crow{grid-template-columns:82px 1fr 50px}
+  .crow{grid-template-columns:72px 1fr auto;gap:10px}
   .chartnote{padding-left:0}
   .stack li{flex-direction:column;gap:2px}
   .stack li b{flex:none}

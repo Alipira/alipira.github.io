@@ -237,42 +237,44 @@
           <p>
             Non-technical loss — theft, meter tampering, billing faults — is the
             part of distribution loss that inspection alone cannot locate, and
-            untargeted inspection loses money, which is why utilities tolerate
-            it. Earlier work on this shipped to production and cut confirmed
+            utilities can inspect only a small fraction of customers each year.
+            Earlier work on this shipped to production and cut confirmed
             theft losses by 3%.
           </p>
           <p>
-            The current model, PI-STGAT, puts the feeder energy balance inside
-            the loss function as a physical constraint rather than treating the
-            transformer reading as one more input feature. It therefore has to
-            attribute the unexplained residual to individual meters, and reports
-            estimated stolen kilowatt-hours instead of a bare probability. Where
-            it fails is also measured: theft that shifts consumption without
-            reducing the total violates no conservation law and stays largely
-            invisible.
+            The current model, PI-STGAT, puts the feeder energy balance into the
+            training objective rather than treating the transformer reading as
+            one more input feature, and estimates stolen kilowatt-hours per
+            meter alongside a theft probability. Labels are treated as
+            positive-unlabelled, as they are at a real utility. On a five-seed
+            simulation it ranks well, but a per-customer CNN is at least as
+            accurate, so no architectural advantage is claimed yet. Theft that
+            shifts consumption without reducing the total remains the hardest
+            case.
           </p>
           <div class="study-foot">
-            <span class="status">Ongoing · unpublished</span>
+            <span class="status">Ongoing · not peer reviewed</span>
             <a class="btn btn-primary" href="research/non-technical-loss/">Read the test report</a>
-            <a class="btn btn-ghost" href="https://github.com/Alipira/PI-STGAT/blob/main/report/PI-STGAT_research_report.pdf">Full report (PDF) ↗</a>
-            <a class="btn btn-ghost" href="https://github.com/Alipira/PI-STGAT">Source ↗</a>
+            <a class="btn btn-ghost" href="https://github.com/Alipira/NTL_detection/blob/main/report/PI-STGAT_research_report.pdf">Full report (PDF) ↗</a>
+            <a class="btn btn-ghost" href="https://github.com/Alipira/NTL_detection">Source ↗</a>
           </div>
         </div>
 
         <aside class="panel">
-          <p class="cap">Detection quality on identical realistic-network data</p>
+          <p class="cap">Deployment rehearsal: share of thieves at the top of the inspection list</p>
           <div class="pbar">
-            <span class="lab">PI-STGAT</span>
-            <span class="track"><span class="fill" style="width:90.1%"></span></span>
-            <span class="val">0.901 AUPR</span>
+            <span class="lab">Top 5% of ranking</span>
+            <span class="track"><span class="fill" style="width:76%"></span></span>
+            <span class="val">76–93%</span>
           </div>
           <div class="pbar">
-            <span class="lab">Per-customer 1D-CNN</span>
-            <span class="track"><span class="fill base" style="width:79.3%"></span></span>
-            <span class="val">0.793 AUPR</span>
+            <span class="lab">Base rate</span>
+            <span class="track"><span class="fill base" style="width:16%"></span></span>
+            <span class="val">16%</span>
           </div>
           <p class="foot">
-            Mean of 3 seeds · 150 simulated feeders, ~3,000 meters, 365 days ·
+            Five defective exports with hidden truth, 30% of thieves labelled ·
+            901 test meters · range over five PU priors · simulated data, 5 seeds,
             61k parameters
           </p>
         </aside>

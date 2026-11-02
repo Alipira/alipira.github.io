@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PI-STGAT — Detector Test Report · Ali Pira</title>
-<meta name="description" content="A physics-informed spatio-temporal graph attention network for electricity non-technical loss. Enforces the feeder energy balance inside the loss function, reports estimated stolen kWh, and is tested under partial labels: AUPR 0.901 vs 0.793 for a per-customer baseline.">
+<meta name="description" content="A physics-informed spatio-temporal graph attention network for electricity non-technical loss. Puts the feeder energy balance in the training objective, estimates stolen kWh per meter, and is tested on a simulated network (5 seeds) and in a five-export deployment rehearsal with positive-unlabelled labels.">
 <meta property="og:title" content="PI-STGAT — Detector Test Report">
-<meta property="og:description" content="Finding electricity theft by making the grid balance its own books. Results, ablation, robustness audit and inspection economics.">
+<meta property="og:description" content="Finding electricity theft by making the grid balance its own books. Results, ablation, deployment rehearsal, robustness audit and stolen-energy recovery.">
 <meta property="og:url" content="https://alipira.github.io/research/non-technical-loss/">
 <meta property="og:type" content="article">
 <meta name="theme-color" content="#F7F9FA" media="(prefers-color-scheme: light)">
@@ -44,15 +44,16 @@
       <span>Detector test report</span>
       <span><b>PI-STGAT</b></span>
       <span>Physics-informed spatio-temporal graph attention network</span>
-      <span>3 seeds · 1 GPU</span>
-      <span>Ongoing · unpublished</span>
+      <span>5 seeds · 1 GPU</span>
+      <span>Ongoing · not peer reviewed</span>
     </div>
     <h1>Finding electricity theft by making the grid balance its own books</h1>
     <p class="sub">
-      Utilities lose roughly $100bn a year to non-technical losses, yet untargeted
-      inspection is itself loss-making — which is why it rarely happens. This project
-      reframes theft detection as an inspection-budget problem and reports what a
-      detector actually delivers under realistic, partially-labelled conditions.
+      Utilities can inspect only a small fraction of customers each year, so what
+      matters is how many thieves, and how much stolen energy, sit at the top of
+      the inspection list. This project treats theft detection as ranking under a
+      fixed inspection budget with partial labels, and reports what a detector
+      delivers on a simulated network and in a deployment rehearsal with hidden truth.
     </p>
   </header>
 
@@ -65,15 +66,16 @@
       <span>transformer head reading</span>
     </div>
     <p class="note">
-      Every low-voltage feeder is a closed accounting system. Prior work treats the
-      transformer reading as one more input feature; here it becomes a physical
-      constraint inside the loss function, so the network must attribute the
-      unexplained residual to specific meters — and can therefore report
-      <strong>estimated stolen kilowatt-hours</strong>, not just a probability.
+      Every low-voltage feeder is a closed accounting system. Earlier work uses the
+      transformer reading as a screening gate or as one more input feature; here the
+      balance enters the training objective, and a conservation head estimates
+      <strong>unbilled kilowatt-hours per meter</strong>, not just a probability.
+      The constraint fixes how much energy a feeder is missing, never which meter
+      took it: attribution within a feeder comes from the learned branches.
     </p>
 
     <div class="balance">
-      <div class="bar" role="img" aria-label="Feeder energy balance: 78 percent metered consumption, 9 percent technical loss, 13 percent unexplained residual attributed to theft">
+      <div class="bar" role="img" aria-label="Illustrative feeder energy balance: metered consumption, technical loss, and the unexplained residual attributed to theft">
         <div class="seg metered">metered consumption</div>
         <div class="seg tech">loss</div>
         <div class="seg theft">theft</div>
@@ -90,56 +92,66 @@
     <div class="shead"><h2>What was built and measured</h2><span class="tag">Scale</span></div>
     <div class="fields">
       <div class="field"><div class="k">Network simulated</div><div class="v">150</div><div class="n">feeders · ~3,000 meters</div></div>
-      <div class="field"><div class="k">Observation window</div><div class="v">365 d</div><div class="n">≈1.1M meter-days per run</div></div>
-      <div class="field"><div class="k">Training runs</div><div class="v">15</div><div class="n">5 configs × 3 seeds</div></div>
-      <div class="field"><div class="k">Attack types</div><div class="v">8</div><div class="n">6 standard + 2 novel</div></div>
-      <div class="field"><div class="k">Model size</div><div class="v">61k</div><div class="n">parameters, one RTX 4080</div></div>
-      <div class="field"><div class="k">Rehearsal set</div><div class="v">1,158</div><div class="n">meters, 48 confirmed labels</div></div>
+      <div class="field"><div class="k">Observation window</div><div class="v">365 d</div><div class="n">≈1.1M meter-days per network</div></div>
+      <div class="field"><div class="k">Seeds</div><div class="v">5</div><div class="n">each fixes network, split and initialisation</div></div>
+      <div class="field"><div class="k">Attack types</div><div class="v">8</div><div class="n">6 standard + 2 new</div></div>
+      <div class="field"><div class="k">Model size</div><div class="v">61k</div><div class="n">parameters · full run ~24 min on one RTX 4080</div></div>
+      <div class="field"><div class="k">Rehearsal</div><div class="v">5</div><div class="n">defective exports · 901 test meters, 40 confirmed thieves</div></div>
     </div>
   </section>
 
   <section class="rsec">
-    <div class="shead"><h2>The architecture earns its place</h2><span class="tag">Like-for-like, identical data</span></div>
+    <div class="shead"><h2>No architectural advantage shown yet</h2><span class="tag">Mean ± s.d., 5 seeds</span></div>
     <div class="tw">
       <table>
-        <caption>Model comparison — the AUPR floor equals each test set's prevalence</caption>
+        <caption>Model comparison — bars within a dataset share data but not necessarily a split</caption>
         <thead><tr><th scope="col">Model</th><th scope="col">Dataset</th><th scope="col">AUPR</th><th scope="col">ROC-AUC</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Baseline 1D-CNN</th><td>easy per-customer</td><td>0.908</td><td>0.974</td></tr>
-          <tr><th scope="row">XGBoost</th><td>easy per-customer</td><td>0.792</td><td>0.884</td></tr>
-          <tr><th scope="row">Baseline 1D-CNN</th><td>realistic network</td><td>0.793</td><td>0.910</td></tr>
-          <tr class="lead"><th scope="row">PI-STGAT (full)</th><td>realistic network</td><td>0.901</td><td>0.973</td></tr>
+          <tr><th scope="row">Baseline 1D-CNN</th><td>per-customer generator</td><td>0.938 ± 0.024</td><td>0.973 ± 0.014</td></tr>
+          <tr><th scope="row">XGBoost</th><td>per-customer generator</td><td>0.802 ± 0.034</td><td>0.884 ± 0.016</td></tr>
+          <tr class="lead"><th scope="row">Baseline 1D-CNN</th><td>network simulator</td><td>0.950 ± 0.021</td><td>0.978 ± 0.010</td></tr>
+          <tr><th scope="row">PI-STGAT (full)</th><td>network simulator</td><td>0.935 ± 0.028</td><td>0.977 ± 0.010</td></tr>
+          <tr><th scope="row">PI-STGAT + SSL + augmentation</th><td>network simulator</td><td>0.969 ± 0.009</td><td>0.984 ± 0.007</td></tr>
         </tbody>
       </table>
     </div>
     <p class="note">
-      Realistic network conditions cost a per-customer model about 0.11 AUPR. The
-      proposed architecture recovers essentially all of it on the same data, so the
-      gain is attributable to the model rather than to an easier benchmark.
+      A per-customer CNN, given each meter's reported series only, is at least as
+      accurate as the full model. The comparison is not controlled: the CNN splits
+      customers, so meters from one feeder land in both training and test, while
+      PI-STGAT holds out whole feeders; and the CNN trains with augmentation matching
+      six of the eight test attacks. The augmented PI-STGAT variant scores higher, but
+      under a different split. A same-split, same-augmentation comparison is the next
+      step; an earlier claim that the architecture recovers a large “cost of network
+      realism” is withdrawn.
     </p>
   </section>
 
   <section class="rsec">
-    <div class="shead"><h2>Ablation, reported honestly</h2><span class="tag">Mean of 3 seeds</span></div>
+    <div class="shead"><h2>Ablation, reported honestly</h2><span class="tag">Mean ± s.d., 5 seeds</span></div>
     <div class="tw">
       <table>
-        <caption>Each branch added in turn</caption>
-        <thead><tr><th scope="col">Configuration</th><th scope="col">AUPR</th><th scope="col">ROC-AUC</th><th scope="col">Recall@10%</th></tr></thead>
+        <caption>Each branch added in turn, then two variants of the full model</caption>
+        <thead><tr><th scope="col">Configuration</th><th scope="col">AUPR</th><th scope="col">ROC-AUC</th><th scope="col">Higher than previous row</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Temporal only</th><td>0.838</td><td>0.923</td><td>0.693</td></tr>
-          <tr class="lead"><th scope="row">+ Static context</th><td>0.901</td><td>0.973</td><td>0.728</td></tr>
-          <tr><th scope="row">+ Graph (feeder topology)</th><td>0.897</td><td>0.971</td><td>0.728</td></tr>
-          <tr class="lead"><th scope="row">+ Physics (full)</th><td>0.901</td><td>0.973</td><td>0.723</td></tr>
+          <tr><th scope="row">Temporal only</th><td>0.901 ± 0.037</td><td>0.950 ± 0.026</td><td>—</td></tr>
+          <tr><th scope="row">+ Static context</th><td>0.940 ± 0.029</td><td>0.977 ± 0.014</td><td>5/5 seeds</td></tr>
+          <tr><th scope="row">+ Feeder attention</th><td>0.948 ± 0.019</td><td>0.980 ± 0.011</td><td>3/5</td></tr>
+          <tr><th scope="row">+ Physics (full)</th><td>0.935 ± 0.028</td><td>0.977 ± 0.010</td><td>1/5</td></tr>
+          <tr class="lead"><th scope="row">Full + SSL + augmentation</th><td>0.969 ± 0.009</td><td>0.984 ± 0.007</td><td>5/5 vs full</td></tr>
+          <tr class="lead"><th scope="row">Full + positional code</th><td>0.971 ± 0.007</td><td>0.988 ± 0.007</td><td>5/5 vs full</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="tienote">Highlighted rows are tied on AUPR at 0.901 — not a single winner.</p>
+    <p class="tienote">Five seeds give little power; 5/5 is the strongest pattern five seeds can show, not a significance test.</p>
     <p class="note">
-      Only the first step separates beyond seed noise. The graph and physics
-      increments fall inside the error bars at this network scale, stated plainly
-      rather than rounded into a success. Their contribution appears instead in
-      per-attack behaviour and in the stolen-energy estimates that no other
-      configuration can produce.
+      Static attributes help on every seed, and still do when meter age and alarm
+      counts are redrawn independently of theft. Feeder attention is not separable
+      from noise. The physics branch lowers AUPR slightly on four of five seeds, as
+      expected: the conservation term fixes feeder totals, not the within-feeder
+      ranking that AUPR measures. Its value is the stolen-energy estimate. A
+      positional code in the temporal encoder and SSL with augmentation each raise
+      AUPR on every seed by about 0.035.
     </p>
   </section>
 
@@ -148,41 +160,36 @@
     <div class="chart">
       <div class="crow">
         <span class="lab">Top 5%</span>
-        <span class="track" role="img" aria-label="Top 5 percent of the ranked list: 50 percent of inspections confirm a thief"><span class="fill" style="width:50%"></span></span>
-        <span class="num">50%</span>
+        <span class="track" role="img" aria-label="Top 5 percent of the ranked list: 76 to 93 percent are thieves, depending on the PU prior"><span class="fill" style="width:76%"></span></span>
+        <span class="num">76–93%</span>
       </div>
       <div class="crow">
         <span class="lab">Top 10%</span>
-        <span class="track" role="img" aria-label="Top 10 percent of the ranked list: 34 percent of inspections confirm a thief"><span class="fill" style="width:34%"></span></span>
-        <span class="num">34%</span>
+        <span class="track" role="img" aria-label="Top 10 percent of the ranked list: 57 to 70 percent are thieves, depending on the PU prior"><span class="fill" style="width:57%"></span></span>
+        <span class="num">57–70%</span>
       </div>
       <div class="crow">
-        <span class="lab">Top 15%</span>
-        <span class="track" role="img" aria-label="Top 15 percent of the ranked list: 33 percent of inspections confirm a thief"><span class="fill" style="width:33%"></span></span>
-        <span class="num">33%</span>
-      </div>
-      <!-- REVIEW BEFORE PUBLISHING: this 20% is the untargeted hit rate used in the
-           economics model below. The rehearsal set's own prevalence is stated as 13%.
-           Decide which figure is the comparator for this chart and make the two agree,
-           or keep both and label each explicitly. -->
-      <div class="crow">
-        <span class="lab">Untargeted</span>
-        <span class="track" role="img" aria-label="Untargeted inspection reference: 20 percent hit rate"><span class="fill base" style="width:20%"></span></span>
-        <span class="num">20%</span>
+        <span class="lab">Base rate</span>
+        <span class="track" role="img" aria-label="Base rate: 16 percent of test meters are thieves"><span class="fill base" style="width:16%"></span></span>
+        <span class="num">16%</span>
       </div>
     </div>
     <p class="chartnote">
-      Share of inspections that confirm a real thief, out-of-sample meters ·
-      “Untargeted” is the industry reference rate used in the economics below
+      Share of thieves in the top of each ranking · test feeders of five exports pooled
+      (901 meters, 142 thieves) · range over five PU priors, bar drawn at the lowest
     </p>
     <p class="note">
-      Only 48 of the 1,158 meters carried confirmed labels while true prevalence was
-      13%, so two thirds of thieves were unlabelled. Training therefore used
-      positive-unlabelled learning, and a deliberately mis-set class prior was found
-      to collapse training after six epochs. Diagnosing that, characterising it with
-      a prior sweep, and fixing it produced the result above. Evaluating against
-      confirmed labels alone understates true performance by a measured
-      <strong>1.48×</strong>, which makes every real-world figure here a lower bound.
+      Each export carries the defects a utility file would: gaps, blank rows, late
+      joiners, dead and unmapped meters, wrong transformer links, unmetered load and
+      head noise. Only 30% of thieves are labelled, so the confirmed rate (3–4%) is
+      far below true prevalence (10–15%). Setting the PU prior to that confirmed rate
+      puts training in the regime where the objective stops rewarding detection:
+      validation ROC-AUC fell below 0.5 in 22% of epochs on average, and never at a
+      prior of 0.13 or above. Selecting the best validation epoch still recovered
+      usable rankings, and no prior was consistently best. Evaluating against
+      confirmed labels alone understated true AUPR by <strong>3.5×</strong> on average
+      (predicted 3.7×, range 1.2–8.3), so real-world confirmed-only figures should be
+      read as lower bounds.
     </p>
   </section>
 
@@ -191,55 +198,58 @@
     <div class="cols">
       <div class="tw">
         <table>
-          <caption>Recall by attack type</caption>
+          <caption>Recall@10% by attack type, range over configurations</caption>
           <thead><tr><th scope="col">Attack</th><th scope="col">Recall@10%</th></tr></thead>
           <tbody>
-            <tr><th scope="row">Zeroing / per-step / fractional</th><td><span class="good">~1.00</span></td></tr>
-            <tr><th scope="row">Seasonal-gated (novel)</th><td>0.81–0.88</td></tr>
-            <!-- REVIEW: label what the arrow means here (e.g. before → after the prior fix,
-                 or weakest → strongest seed). Left exactly as supplied. -->
-            <tr><th scope="row">Uniform scaling</th><td>0.46 → 0.75</td></tr>
-            <tr class="weak"><th scope="row">Energy-preserving reversal</th><td><span class="flag">0.11–0.25</span></td></tr>
+            <tr><th scope="row">Zero window / per-step / fraction of mean</th><td><span class="good">0.87–1.00</span></td></tr>
+            <tr><th scope="row">Seasonal-gated (new)</th><td>0.81–0.94</td></tr>
+            <tr><th scope="row">Gradual ramp (new)</th><td>0.58–0.76</td></tr>
+            <tr><th scope="row">Flat mean</th><td>0.60–0.84</td></tr>
+            <tr><th scope="row">Uniform scaling: temporal only → with attention or physics</th><td>0.35 → 0.53–0.56</td></tr>
+            <tr class="weak"><th scope="row">Energy-preserving reversal</th><td><span class="flag">0.28–0.42</span></td></tr>
           </tbody>
         </table>
       </div>
       <div class="tw">
         <table>
-          <caption>Flag rate vs true prevalence, by region</caption>
+          <caption>Flag rate and recall by region group, full model</caption>
           <thead><tr><th scope="col">Group</th><th scope="col">Prevalence</th><th scope="col">Flag rate</th><th scope="col">Recall</th></tr></thead>
           <tbody>
-            <tr><th scope="row">Low-prevalence</th><td>0.04</td><td>0.03–0.04</td><td>0.62</td></tr>
-            <tr><th scope="row">High-prevalence</th><td>0.27</td><td>0.30–0.33</td><td>0.90</td></tr>
+            <tr><th scope="row">Low-region</th><td>0.054</td><td>0.05</td><td>0.76</td></tr>
+            <tr><th scope="row">High-region</th><td>0.283</td><td>0.23–0.30</td><td>0.92</td></tr>
           </tbody>
         </table>
       </div>
     </div>
     <p class="note">
-      Energy-preserving theft — where a customer shifts consumption without reducing
-      the total — defeats every configuration including this one, because it violates
-      no conservation law. Flag rates otherwise track each region's real prevalence,
-      so the model does not over-target; but context features widen the recall gap
-      between regions, a trade-off surfaced here rather than left unmeasured.
+      Reversed consumption keeps the same total and the same distribution, so it is
+      invisible to the conservation constraint and to every permutation-invariant
+      feature. The analysis predicted that a calendar reference would help, and adding
+      a positional code raised reversal recall to 0.48 (random ranking gives 0.10).
+      Flag rates track each region's prevalence. Recall is balanced for the
+      temporal-only model (0.80 vs 0.80) and becomes unbalanced once static attributes
+      enter; removing the region input narrows the gap only from 0.16 to 0.13, while
+      the two strongest variants narrow it by lifting low-region recall (0.85 vs 0.93,
+      0.87 vs 0.94).
     </p>
   </section>
 
   <section class="rsec">
-    <div class="shead"><h2>Why a utility would buy it</h2><span class="tag">Modelled on a 500,000-customer network</span></div>
+    <div class="shead"><h2>Stolen energy recovered</h2><span class="tag">Mean of 5 seeds</span></div>
     <div class="econ">
-      <div class="ecard"><div class="k">Untargeted inspection</div><div class="v neg">–$0.49M</div><div class="n">Net annual result at a 20% hit rate — the activity destroys value</div></div>
-      <div class="ecard"><div class="k">Model-ranked inspection</div><div class="v pos">+$1.03M</div><div class="n">Same budget, same crews, reordered work list</div></div>
-      <div class="ecard"><div class="k">System cost</div><div class="v">$98k</div><div class="n">One-time, plus $89k/yr — about 0.1% of the metering infrastructure it runs on</div></div>
-      <div class="ecard"><div class="k">Energy recovered</div><div class="v">80%</div><div class="n">Share of stolen kWh captured by inspecting the top 10%</div></div>
+      <div class="ecard"><div class="k">Inspect top 5%</div><div class="v pos">61%</div><div class="n">of stolen kWh, full model ranked by probability × estimated theft (54% by probability alone)</div></div>
+      <div class="ecard"><div class="k">Inspect top 10%</div><div class="v pos">80%</div><div class="n">full model, cost-aware ranking (77% by probability alone)</div></div>
+      <div class="ecard"><div class="k">Inspect top 20%</div><div class="v pos">92%</div><div class="n">full model, either ranking</div></div>
+      <div class="ecard"><div class="k">With SSL + augmentation</div><div class="v pos">85%</div><div class="n">of stolen kWh in the top 10% (67% top 5%, 97% top 20%)</div></div>
     </div>
     <div class="pull">
       <p>
-        Untargeted inspection loses money, which is why utilities tolerate the theft.
-        The model has to beat it by 1.8 percentage points to pay for itself. At the
-        top 5% of the ranked list, it beats it by thirty.
+        The physics term fixes how much a feeder is missing, never which meter took
+        it. Its contribution is the energy estimate, not sharper discrimination.
       </p>
       <small>
-        Corroboration — Endesa (Spain) reported doubling inspection success to one
-        confirmed theft in every two inspections after adopting ML-based targeting.
+        The top-5% figure varies strongly between seeds (0.22–0.99 for the full model
+        ranked by probability), so only multi-seed values are quoted.
       </small>
     </div>
   </section>
@@ -249,10 +259,10 @@
     <div class="cols">
       <div>
         <ul class="stack">
-          <li><b>Temporal</b><span>Dilated convolution with self-attention over daily consumption</span></li>
-          <li><b>Spatial</b><span>Masked graph attention over the true meter-to-transformer topology</span></li>
-          <li><b>Physics</b><span>Conservation loss plus a softplus head estimating stolen kWh per meter</span></li>
-          <li><b>Labels</b><span>Non-negative positive-unlabelled learning with a prior sweep</span></li>
+          <li><b>Temporal</b><span>Dilated convolution with self-attention over daily consumption; optional positional code</span></li>
+          <li><b>Spatial</b><span>Attention among meters that share a transformer</span></li>
+          <li><b>Physics</b><span>Conservation loss plus a head estimating unbilled kWh per meter</span></li>
+          <li><b>Labels</b><span>Non-negative positive-unlabelled learning, with an analysis and sweep of the class prior</span></li>
           <li><b>Pretraining</b><span>Masked-span reconstruction on unlabelled series</span></li>
           <li><b>Augmentation</b><span>Literature attack functions plus a conditional VAE over theft masks</span></li>
           <li><b>Output</b><span>Temperature-calibrated ranking by probability × estimated stolen energy</span></li>
@@ -260,15 +270,16 @@
       </div>
       <div>
         <ul class="limits">
-          <li>Energy-preserving theft remains largely undetected — by this model and by every published alternative.</li>
-          <li>Graph and physics contributions are not statistically separable on aggregate metrics at this network scale.</li>
-          <li>Validation is a physics-based simulator plus a hidden-truth rehearsal; a prospective pilot with a randomised control arm is the outstanding step.</li>
+          <li>No advantage over a well-trained per-customer CNN is established; a same-split comparison is pending.</li>
+          <li>Feeder attention and the physics branch give no discrimination gain at this network scale.</li>
+          <li>Energy-preserving reversal stays the hardest attack (0.28–0.48 recall@10%).</li>
+          <li>The simulator was written by the author and no real utility data has been used; a prospective pilot with a randomised inspection arm is the outstanding step.</li>
           <li>Out of scope by design: adversarial evasion, privacy-preserving training, appliance-level disaggregation, streaming inference, learned inspection policies.</li>
         </ul>
       </div>
     </div>
-    <a class="backhome" href="https://github.com/Alipira/PI-STGAT/blob/main/report/PI-STGAT_research_report.pdf">Full research report (PDF) ↗</a>
-    <a class="backhome" href="https://github.com/Alipira/PI-STGAT">Code on GitHub ↗</a>
+    <a class="backhome" href="https://github.com/Alipira/NTL_detection/blob/main/report/PI-STGAT_research_report.pdf">Full research report (PDF) ↗</a>
+    <a class="backhome" href="https://github.com/Alipira/NTL_detection">Code on GitHub ↗</a>
     <a class="backhome" href="../../#research">← All research</a>
   </section>
 
@@ -277,7 +288,7 @@
 <footer class="site-foot">
   <div class="wrap">
     <span>PI-STGAT · physics-informed spatio-temporal graph attention network</span>
-    <span>PyTorch · 61,283 parameters · 3-seed reproducible pipeline</span>
+    <span>PyTorch · 61,283 parameters · 5-seed reproducible pipeline</span>
   </div>
 </footer>
 
