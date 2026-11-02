@@ -186,6 +186,7 @@ td .good{color:var(--teal);font-weight:500}
   color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;
 }
 .backhome:hover{color:var(--teal);border-color:var(--teal)}
+.backhome{margin-right:22px}
 
 @media (max-width:760px){
   .cols{grid-template-columns:1fr;gap:28px}
