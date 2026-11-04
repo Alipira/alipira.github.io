@@ -222,7 +222,8 @@
       <h2>Work I do on my own time</h2>
       <p class="section-intro">
         Three lines, all ongoing and unpublished. The first has a full test
-        report; the other two are still being written up. These are the problems
+        report, the second a research report on its design and baselines;
+        the third is still being built. These are the problems
         I want to keep working on — in a doctorate, or in a team that takes them
         seriously.
       </p>
@@ -280,15 +281,45 @@
         </aside>
       </article>
 
-      <ul class="also">
-        <li>
-          <h4>Heterogeneous multi-agent reinforcement learning</h4>
-          <p>
-            Continues the direction of my MSc thesis on multi-agent decision
-            making under reinforcement learning.
+      <article class="study study-solo reveal">
+        <div>
+          <h3>Heterogeneous multi-robot search for undocumented wells</h3>
+          <p class="question">
+            Can a mixed team of aerial and ground robots learn to find an unknown
+            number of buried oil and gas wells from noisy sensor readings, with
+            fewer wasted ground visits than a scripted survey?
           </p>
-          <span class="status">Ongoing · write-up pending</span>
-        </li>
+          <p>
+            Undocumented orphan wells leak methane and contaminate groundwater,
+            and they are still found with fixed-line magnetometer flights followed
+            by ground crews visiting every candidate. HBS (Heterogeneous
+            Belief-driven Search) is a multi-agent reinforcement learning system
+            in which aerial robots screen wide areas with coarse sensors and only
+            ground robots can confirm a well. The team plans over one shared
+            Bayesian belief map, is rewarded for KL information gain, and runs a
+            graph policy that shares parameters within a robot type while passing
+            messages across types. It continues the direction of my MSc thesis on
+            multi-agent decision making.
+          </p>
+          <p>
+            Status: the environment and four scripted baselines are built on VMAS
+            and BenchMARL, checked by 93 executable tests. Learning experiments
+            have not run, so no learned-policy result is claimed. Building and
+            measuring already changed the design: entropy reduction penalised
+            finding a source, and a belief-threshold confirmation rule produced
+            3.2–3.8 false positives per true source, cut to 0.26–0.29 by physical
+            confirmation at a recall cost. Every remaining false positive comes
+            from a ground robot passing a source off-centre; that gap is what
+            learning has to close.
+          </p>
+          <div class="study-foot">
+            <span class="status">Ongoing · baselines built, learning experiments pending</span>
+            <a class="btn btn-primary" href="research/multi-robot-search/HBS_research_report.pdf">Read the research report (PDF)</a>
+          </div>
+        </div>
+      </article>
+
+      <ul class="also">
         <li>
           <h4><a href="https://github.com/Alipira/Recommendation">Hybrid graph + LLM recommender for B2B reordering ↗</a></h4>
           <p>
@@ -503,6 +534,7 @@
           <p class="mini stacked">Selected work on this site</p>
           <ul class="cred">
             <li><a href="#research">PI-STGAT — non-technical loss detection</a><span class="when">Independent research · ongoing</span></li>
+            <li><a href="#research">HBS — heterogeneous multi-robot well search</a><span class="when">Independent research · ongoing</span></li>
             <li><a href="#library">Three open field guides</a><span class="when">Roadmap · design patterns · interview bank</span></li>
           </ul>
         </div>

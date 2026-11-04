@@ -76,6 +76,7 @@
   border-top:2px solid var(--ink);padding-top:22px;
   display:grid;grid-template-columns:1fr 232px;gap:36px;
 }
+.study-solo{grid-template-columns:1fr;margin-top:40px}
 .study h3{font-size:1.45rem;line-height:1.2;margin-bottom:6px}
 .question{
   font-style:italic;color:var(--muted);font-size:1.05rem;margin-bottom:16px;max-width:52ch;
